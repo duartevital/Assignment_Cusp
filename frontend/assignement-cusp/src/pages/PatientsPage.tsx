@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllPatients } from '../api/patients';
-import type { Patient } from '../api/types';
+import type { Patient } from '../api/Patient';
 import Avatar from '../components/Avatar';
 import CreatePatientModal from '../components/CreatePatientModal';
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { createAppointment, getTreatments } from '../api/appointments';
-import type { Appointment, Treatment } from '../api/types';
+import type { Appointment } from '../api/Appointment';
+import type { Treatment } from '../api/Treatment';
 
 const DENTISTS = [
   'Dr. Anderson',

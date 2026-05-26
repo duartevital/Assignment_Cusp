@@ -1,4 +1,4 @@
-import type { Patient } from './types';
+import type { Patient } from './Patient';
 
 async function handleResponse<T>(res: Response): Promise<T> {
   if (!res.ok) {

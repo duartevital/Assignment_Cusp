@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { createPatient } from '../api/patients';
-import type { Patient } from '../api/types';
+import type { Patient } from '../api/Patient';
 
 interface Props {
   onClose: () => void;

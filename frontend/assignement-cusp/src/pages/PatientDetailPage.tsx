@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getPatient } from '../api/patients';
-import type { Appointment, Patient } from '../api/types';
+import type { Appointment } from '../api/Appointment';
+import type { Patient } from '../api/Patient';
 import AddAppointmentForm from '../components/AddAppointmentForm';
 import AppointmentList from '../components/AppointmentList';
 import Avatar from '../components/Avatar';

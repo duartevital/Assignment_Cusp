@@ -1,4 +1,4 @@
-import type { Appointment } from '../api/types';
+import type { Appointment } from '../api/Appointment';
 
 interface Props {
   appointments: Appointment[];
