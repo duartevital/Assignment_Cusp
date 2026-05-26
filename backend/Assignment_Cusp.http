@@ -1,0 +1,6 @@
+@Assignment_Cusp_HostAddress = http://localhost:5237
+
+GET {{Assignment_Cusp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
