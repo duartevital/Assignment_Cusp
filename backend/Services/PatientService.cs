@@ -23,11 +23,7 @@ public class PatientService(IPatientRepository patientRepository, IWebHostEnviro
 
     public async Task<PatientDto> CreateAsync(CreatePatientRequest request)
     {
-        if (string.IsNullOrWhiteSpace(request.FullName))
-            throw new ValidationException("Full name is required.");
-
-        if (string.IsNullOrWhiteSpace(request.Address))
-            throw new ValidationException("Address is required.");
+        Validate(request);
 
         var photoUrl = await SavePhotoAsync(request.Photo);
 
@@ -40,6 +36,15 @@ public class PatientService(IPatientRepository patientRepository, IWebHostEnviro
 
         var created = await patientRepository.AddAsync(patient);
         return ToDto(created);
+    }
+
+    private static void Validate(CreatePatientRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.FullName))
+            throw new ValidationException("Full name is required.");
+
+        if (string.IsNullOrWhiteSpace(request.Address))
+            throw new ValidationException("Address is required.");
     }
 
     private async Task<string?> SavePhotoAsync(IFormFile? photo)

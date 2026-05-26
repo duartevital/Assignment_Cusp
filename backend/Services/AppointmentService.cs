@@ -32,17 +32,7 @@ public class AppointmentService(
 
     public async Task<AppointmentDto> CreateAsync(CreateAppointmentRequest request)
     {
-        if (request.PatientId <= 0)
-            throw new ValidationException("A valid patient ID is required.");
-
-        if (request.DateTime == default)
-            throw new ValidationException("Appointment date and time are required.");
-
-        if (string.IsNullOrWhiteSpace(request.Dentist))
-            throw new ValidationException("Dentist is required.");
-
-        if (!TreatmentDurations.TryGetValue(request.Treatment ?? "", out var duration))
-            throw new ValidationException($"Treatment must be one of: {string.Join(", ", TreatmentDurations.Keys)}.");
+        Validate(request);
 
         var patientExists = await patientRepository.ExistsAsync(request.PatientId);
         if (!patientExists)
@@ -53,12 +43,27 @@ public class AppointmentService(
             PatientId = request.PatientId,
             DateTime = request.DateTime.ToUniversalTime(),
             Dentist = request.Dentist.Trim(),
-            Treatment = request.Treatment!,
-            DurationMinutes = duration
+            Treatment = request.Treatment,
+            DurationMinutes = TreatmentDurations[request.Treatment]
         };
 
         var created = await appointmentRepository.AddAsync(appointment);
         return ToDto(created);
+    }
+
+    private void Validate(CreateAppointmentRequest request)
+    {
+        if (request.PatientId <= 0)
+            throw new ValidationException("A valid patient ID is required.");
+
+        if (request.DateTime == default)
+            throw new ValidationException("Appointment date and time are required.");
+
+        if (string.IsNullOrWhiteSpace(request.Dentist))
+            throw new ValidationException("Dentist is required.");
+
+        if (!TreatmentDurations.ContainsKey(request.Treatment))
+            throw new ValidationException($"Treatment must be one of: {string.Join(", ", TreatmentDurations.Keys)}.");
     }
 
     private static AppointmentDto ToDto(Appointment a) =>
