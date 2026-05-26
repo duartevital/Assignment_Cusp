@@ -1,6 +1,9 @@
 import { useRef, useState } from 'react';
 import { createPatient } from '../api/patients';
 import type { Patient } from '../api/Patient';
+import Button from './ui/Button';
+import FormField from './ui/FormField';
+import Input from './ui/Input';
 
 interface Props {
   onClose: () => void;
@@ -66,31 +69,23 @@ export default function CreatePatientModal({ onClose, onCreated }: Props) {
             </p>
           )}
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Full Name <span className="text-red-500">*</span>
-            </label>
-            <input
+          <FormField label="Full Name" required>
+            <Input
               type="text"
               value={fullName}
               onChange={e => setFullName(e.target.value)}
               placeholder="e.g. Jane Doe"
-              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Address <span className="text-red-500">*</span>
-            </label>
-            <input
+          <FormField label="Address" required>
+            <Input
               type="text"
               value={address}
               onChange={e => setAddress(e.target.value)}
               placeholder="e.g. 123 Main St, Dublin"
-              className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-          </div>
+          </FormField>
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Photo</label>
@@ -101,13 +96,7 @@ export default function CreatePatientModal({ onClose, onCreated }: Props) {
                   : '📷'}
               </div>
               <div>
-                <input
-                  ref={fileRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoChange}
-                  className="hidden"
-                />
+                <input ref={fileRef} type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
                 <button
                   type="button"
                   onClick={() => fileRef.current?.click()}
@@ -123,20 +112,12 @@ export default function CreatePatientModal({ onClose, onCreated }: Props) {
           </div>
 
           <div className="flex gap-3 pt-2">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 border border-slate-300 text-slate-600 text-sm font-medium py-2 rounded-lg hover:bg-slate-50 transition-colors"
-            >
+            <Button variant="secondary" fullWidth type="button" onClick={onClose}>
               Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium py-2 rounded-lg transition-colors"
-            >
+            </Button>
+            <Button variant="primary" fullWidth type="submit" disabled={submitting}>
               {submitting ? 'Creating…' : 'Create Patient'}
-            </button>
+            </Button>
           </div>
         </form>
       </div>

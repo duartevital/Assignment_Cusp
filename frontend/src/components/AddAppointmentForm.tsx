@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react';
 import { createAppointment, getTreatments } from '../api/appointments';
 import type { Appointment } from '../api/Appointment';
 import type { Treatment } from '../api/Treatment';
+import Button from './ui/Button';
+import FormField from './ui/FormField';
+import Input from './ui/Input';
+import Select from './ui/Select';
 
 const DENTISTS = [
   'Dr. Anderson',
@@ -34,9 +38,9 @@ export default function AddAppointmentForm({ patientId, onAdded, onCancel }: Pro
     e.preventDefault();
     setError(null);
 
-    if (!date) { setError('Date is required.'); return; }
-    if (!time) { setError('Time is required.'); return; }
-    if (!dentist) { setError('Please select a dentist.'); return; }
+    if (!date)      { setError('Date is required.'); return; }
+    if (!time)      { setError('Time is required.'); return; }
+    if (!dentist)   { setError('Please select a dentist.'); return; }
     if (!treatment) { setError('Please select a treatment.'); return; }
 
     try {
@@ -67,83 +71,43 @@ export default function AddAppointmentForm({ patientId, onAdded, onCancel }: Pro
       )}
 
       <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Date <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="date"
-            value={date}
-            min={todayDate}
-            onChange={e => setDate(e.target.value)}
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Time <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="time"
-            value={time}
-            onChange={e => setTime(e.target.value)}
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
+        <FormField label="Date" required>
+          <Input type="date" value={date} min={todayDate} onChange={e => setDate(e.target.value)} />
+        </FormField>
+        <FormField label="Time" required>
+          <Input type="time" value={time} onChange={e => setTime(e.target.value)} />
+        </FormField>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
-          Dentist <span className="text-red-500">*</span>
-        </label>
-        <select
-          value={dentist}
-          onChange={e => setDentist(e.target.value)}
-          className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        >
+      <FormField label="Dentist" required>
+        <Select value={dentist} onChange={e => setDentist(e.target.value)}>
           <option value="">Select a dentist…</option>
           {DENTISTS.map(d => <option key={d} value={d}>{d}</option>)}
-        </select>
-      </div>
+        </Select>
+      </FormField>
 
-      <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
-          Treatment <span className="text-red-500">*</span>
-        </label>
-        <select
-          value={treatment}
-          onChange={e => setTreatment(e.target.value)}
-          className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        >
+      <FormField
+        label="Treatment"
+        required
+        hint={selectedTreatment ? `Duration: ${selectedTreatment.durationMinutes} minutes` : undefined}
+      >
+        <Select value={treatment} onChange={e => setTreatment(e.target.value)}>
           <option value="">Select a treatment…</option>
           {treatments.map(t => (
             <option key={t.name} value={t.name}>
               {t.name} — {t.durationMinutes} min
             </option>
           ))}
-        </select>
-        {selectedTreatment && (
-          <p className="text-xs text-slate-500 mt-1">
-            Duration: {selectedTreatment.durationMinutes} minutes
-          </p>
-        )}
-      </div>
+        </Select>
+      </FormField>
 
       <div className="flex gap-3 pt-1">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="flex-1 border border-slate-300 text-slate-600 text-sm font-medium py-2 rounded-lg hover:bg-slate-50 transition-colors"
-        >
+        <Button variant="secondary" fullWidth type="button" onClick={onCancel}>
           Cancel
-        </button>
-        <button
-          type="submit"
-          disabled={submitting}
-          className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium py-2 rounded-lg transition-colors"
-        >
+        </Button>
+        <Button variant="primary" fullWidth type="submit" disabled={submitting}>
           {submitting ? 'Adding…' : 'Add Appointment'}
-        </button>
+        </Button>
       </div>
     </form>
   );

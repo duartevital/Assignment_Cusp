@@ -4,6 +4,7 @@ import { getAllPatients } from '../api/patients';
 import type { Patient } from '../api/Patient';
 import Avatar from '../components/Avatar';
 import CreatePatientModal from '../components/CreatePatientModal';
+import Button from '../components/ui/Button';
 
 export default function PatientsPage() {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -31,12 +32,9 @@ export default function PatientsPage() {
             <h1 className="text-xl font-bold text-slate-800">🦷 Dental Clinic</h1>
             <p className="text-xs text-slate-500 mt-0.5">Patient Management</p>
           </div>
-          <button
-            onClick={() => setShowModal(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
-          >
+          <Button onClick={() => setShowModal(true)}>
             + Create New Patient
-          </button>
+          </Button>
         </div>
       </header>
 
